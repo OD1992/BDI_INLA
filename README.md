@@ -1,32 +1,39 @@
-Introduction to R-INLA for Spatial Analysis
+Introduction à INLA pour la modélisation géospatiale 
 ============
-The following presentation is to accompany this tutorial:
-https://docs.google.com/presentation/d/1KRrZjiBx_UKETtN-EyEQxMWXAOUxlaMdTzqpPSPMxPc/edit#slide=id.g33fbbb4edf_0_14
+La présentation associée à ce tutoriel est disponible:
+https://docs.google.com/presentation/d/12skzuN4HZfDNrday52C97bycvNzCP20R/edit#slide=id.p1
 
-Overview 
+Vue d'ensemble 
 ------
-In this workshop we will be taking through an example of how to use the SPDE model in INLA package. We will analyse parasite prevalence data from Madagascar. The topics we will cover include:
-* How to create a mesh for the continuously indexed spatial effects
-* Implementing the SPDE model in R-INLA
-* Conducting simple model selection and best fit model
-* Spatial prediction using INLA and outside of INLA
-* Model validation
+Dans cet atelier, nous illustrerons comment utiliser le modèle SPDE avec le package R-INLA. Nous analyserons des données de prévalence parasitaire de Madagascar. Nous aborderons :
 
-For a much more thorough description of R-INLA and the details underlying the SPDE-models see: www.math.ntnu.no/inla/r-inla.org/papers/jss/lindgren.pdf For more details on the example we study here, see: www.math.ntnu.no/inla/r-inla.org/tutorials/spde/spde-tutorial.pdf
+- Comment créer un maillage pour les effets spatiaux continus
+- Implémentation du modèle SPDE avec R-INLA
+- Sélection simple du meilleur modèle
+- Prédiction spatiale avec et en dehors de "inla"
+- Validation du modèle
+
+Pour des détails approfondis, voir: www.math.ntnu.no/inla/r-inla.org/papers/jss/lindgren.pdf et : www.math.ntnu.no/inla/r-inla.org/tutorials/spde/spde-tutorial.pdf
 
 ### Data used
-Malaria prevalence data: Open-access malaria data hosted by the Malaria Atlas Project https://map.ox.ac.uk/ accessed using the malariaAtlas R package
+Données
 
-Covariate data: a suite of satelitte imagery was cleaned and processed for this tutorial but is available upon request from the MAP team.
+Téléchargez le projet à partir de <https://github.com/PunamA/BDI_INLA> : unzippez et ouvrez `BDI_INLA.Rproj`. Utilisez `Intro_to_INLA_students.R`.
 
-For data cleaning and prep work please run the R-Script **data_prep.R** 
-```{r}
+**Données de prévalence** : disponibles via le <a href=https://malariaatlas.org/pr-survey-data/>Malaria Atlas Project</a> (données MIS Madagascar 2021)
+
+**Covariables** : Images satellites nettoyées, accessibles sur demande.
+
+```{r data, eval = FALSE, echo = FALSE}
 source('data_prep.R')
 ```
-we reccomend looking at the script but it is not necessary to run as we provide the cleaned output for this workshop in ```inputs/MDG_clean.Rdata```
 
+Ou chargez directement :
 
-for this workshop we have included in the scripts the library packages needed. These are:
+```{r}
+load('input/MDG_clean.Rdata')
+
+Chargement des bibliothèques nécessaires:
 
 ```{r}
 library(INLA)
@@ -37,14 +44,14 @@ library(tidyverse)
 library(lattice)     
 library(gridExtra)
 ```
-for installation please use
+Pour l' installation
 ```{r}
 packages <- c("malariaAtlas", "raster", "sp", "tidyverse",
               "lattice", "gridExtra", "devtools", "rlang")
 if(length(setdiff(packages, rownames(installed.packages()))) > 0) { 
   install.packages(setdiff(packages, rownames(installed.packages()))) }
 
-#For INLA!!
+# Pour INLA!!
 if(length(setdiff("INLA", rownames(installed.packages()))) > 0){
   install.packages("INLA", repos=c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
 }
