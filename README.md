@@ -59,5 +59,5 @@ if(length(setdiff("INLA", rownames(installed.packages()))) > 0){
 ```
 **Ressources supplémentaires** :
 1. Site web INLA <http://www.r-inla.org/>
-2. Modeles spatiotemporel Bayesien <https://sites.google.com/a/r-inla.org/stbook/>
+2. Modeles spatiotemporel Bayesien <https://sites.google.com/a/r-inla.org/stbook>
 3. Inference Bayesienne avec INLA et R-INLA <https://becarioprecario.bitbucket.io/inla-gitbook/index.html>
