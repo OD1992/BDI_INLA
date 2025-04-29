@@ -11,10 +11,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Punam Amratia, Susan Rumisha, Andre Python and Penny Hancock" />
+<meta name="author" content="Ousmane Diao, Punam Amratia, Susan Rumisha, Andre Python and Penny Hancock" />
 
 
-<title>Introduction to INLA for geospatial modelling</title>
+<title>Introduction à INLA pour la modélisation géospatiale</title>
 
 
 
@@ -95,26 +95,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <section class="page-header">
-<h1 class="title toc-ignore project-name">Introduction to INLA for geospatial modelling</h1>
-<h4 class="author project-author">Punam Amratia, Susan Rumisha, Andre Python and Penny Hancock</h4>
-<h4 class="date project-date">5th September 2019</h4>
+<h1 class="title toc-ignore project-name">Introduction à INLA pour la modélisation géospatiale</h1>
+<h4 class="author project-author">Ousmane Diao, Punam Amratia, Susan Rumisha, Andre Python and Penny Hancock</h4>
+<h4 class="date project-date">29th April 2025</h4>
 </section>
 
 
 
 <section class="main-content">
-<p>The following presentation is to accompany this tutorial can be found <a href="https://docs.google.com/presentation/d/1KRrZjiBx_UKETtN-EyEQxMWXAOUxlaMdTzqpPSPMxPc/edit#slide=id.g33fbbb4edf_0_14">HERE</a></p>
+<p>La présentation associée à ce tutoriel est disponible:
+https://docs.google.com/presentation/d/12skzuN4HZfDNrday52C97bycvNzCP20R/edit#slide=id.p1">ICI</a></p>
 <div id="overview" class="section level2">
-<h2>Overview</h2>
-<p>In this workshop we will be taking through an example of how to use the SPDE model using the R-INLA package. We will analyse parasite prevalence data from Madagascar. The topics we will cover include:</p>
+<h2>Vue d'ensemble</h2>
+<p>Dans cet atelier, nous illustrerons comment utiliser le modèle SPDE avec le package R-INLA. Nous analyserons des données de prévalence parasitaire de Madagascar. Nous aborderons :</p>
 <ul>
-<li>How to create a mesh for the continuously indexed spatial effects</li>
-<li>Implementing the SPDE model in R-INLA</li>
-<li>Conducting simple model selection and best fit model</li>
-<li>Spatial prediction using R-INLA within and outside the fitting function (“inla”)</li>
-<li>Model validation</li>
+<li>Comment créer un maillage pour les effets spatiaux continus</li>
+<li>Implémentation du modèle SPDE avec R-INLA</li>
+<li>Sélection simple du meilleur modèle</li>
+<li>Prédiction spatiale avec et en dehors de la fonction "inla"</li>
+<li>Validation du modèle</li>
 </ul>
-<p>For a much more thorough description of R-INLA and the details underlying the SPDE models, please see <a href="https://www.jstatsoft.org/index.php/jss/article/view/v063i19/v63i19.pdf">Harvard &amp; Rue 2015</a></p>
+<p>Pour des détails approfondis, voir <a href="https://www.jstatsoft.org/index.php/jss/article/view/v063i19/v63i19.pdf">Harvard &amp; Rue 2015</a></p>
 <div id="data" class="section level3">
 <h3>1. Data</h3>
 <p>We recommend downloading the Rproject file from <a href="https://github.com/PunamA/BDI_INLA" class="uri">https://github.com/PunamA/BDI_INLA</a>. First, download the zip file. Unzip and click the <code>BDI_INLA.Rproj</code> file. We recommend you to use the <code>Intro_to_INLA_students.R</code> Script. In case you want to get further details (or answers to any coding questions), we have provided you with our instructor script as well.</p>
