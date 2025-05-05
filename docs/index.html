@@ -126,24 +126,24 @@ https://docs.google.com/presentation/d/12skzuN4HZfDNrday52C97bycvNzCP20R/edit#sl
 </div>
 <div id="model-description" class="section level3">
 <h3>2. Description du modèle</h3>
-<p>Let <span class="math inline">\(Y_i\)</span> be the number of people tested positive (e.g. for malaria) which can be modelled as a binomial.</p>
+<p>Soit <span class="math inline">\(Y_i\)</span> le nombre de personnes testées positives (ex., pour le paludisme) qui peut être modélisé par une loi binômiale.</p>
 <p><span class="math display">\[
 Y_i \sim Binomial(p(s_i), N_i)
-\]</span> where <span class="math inline">\(p(s_i)\)</span> is the probability of positive for location <span class="math inline">\(i\)</span> and <span class="math inline">\(N_i\)</span> is the number of examined. The linear predictor is expressed as linear combinations (thus, “linear”) of unknown parameters. The canonical link for the Binomial distribution is the logit function, which transforms probability [0,1] values into real values.</p>
+\]</span> where <span class="math inline">\(p(s_i)\)</span> est la probabilité de positive pour l’emplacement <span class="math inline">\(i\)</span> et <span class="math inline">\(N_i\)</span> est le nombre de paramètres examinés. Le prédicteur linéaire est exprimé sous forme de combinaisons linéaires (c’est-à-dire « linéaires ») de paramètres inconnus. Le lien canonique pour la distribution binomiale est la fonction logit, qui transforme les valeurs de probabilité [0,1] en valeurs réelles.</p>
 <p><span class="math display">\[
 logit(p(s_i)) = \beta_0 + X(s)\beta + \psi(s_i)
-\]</span> where <span class="math inline">\(\beta_0\)</span> is the Intercept and <span class="math inline">\(\beta\)</span> is the covariate coefficient (slope). <span class="math inline">\(\psi(s_i)\)</span> is a gaussian field that can be approximated using a Gaussian Markov random field (GMRF) and can be represented as: <span class="math display">\[
+\]</span> où <span class="math inline">\(\beta_0\)</span> est l'intercept et <span class="math inline">\(\beta\)</span> est le coefficient de covariance (pente). <span class="math inline">\(\psi(s_i)\)</span> est un champ gaussien qui peut être approximé à l’aide d’un champ aléatoire de Markov gaussien (GMRF) et peut être représenté comme: <span class="math display">\[
 \psi(s_i)\sim N(0,\Sigma)
-\]</span> where <span class="math inline">\(\Sigma\)</span> is a covariance matrix is determined by a spatial correlation function. In this case we will be using the Matern function:</p>
+\]</span>  où <span class="math inline">\(\Sigma\)</span> est une matrice de covariance déterminée par une fonction de corrélation spatiale. Dans ce cas, nous utiliserons la fonction de Matern:</p>
 <p><span class="math display">\[
 \frac{\sigma^2}{\Gamma(\lambda)2^{\lambda - 1}}(\kappa\parallel s_i - s_j\parallel)^\lambda K_\lambda(\kappa\parallel s_i - s_j\parallel)
-\]</span> In this Bayesian context, we set priors for all parameters <span class="math display">\[
+\]</span> Dans ce contexte Bayesien, nous fixons des priorités pour tous les paramètres <span class="math display">\[
 \theta \sim \pi(\theta)
 \]</span></p>
 </div>
 <div id="libraries-needed-and-installation" class="section level3">
-<h3>3. Libraries needed and Installation</h3>
-<p>for installation please use</p>
+<h3>3. Bibliothèques nécessaires et installation</h3>
+<p>pour l’installation s’il vous plaît utiliser</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">packages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;malariaAtlas&quot;</span>, <span class="st">&quot;raster&quot;</span>, <span class="st">&quot;sp&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>,
               <span class="st">&quot;lattice&quot;</span>, <span class="st">&quot;gridExtra&quot;</span>, <span class="st">&quot;devtools&quot;</span>, <span class="st">&quot;rlang&quot;</span>)
 <span class="cf">if</span>(<span class="kw">length</span>(<span class="kw">setdiff</span>(packages, <span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) { 
