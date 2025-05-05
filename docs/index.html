@@ -118,14 +118,14 @@ https://docs.google.com/presentation/d/12skzuN4HZfDNrday52C97bycvNzCP20R/edit#sl
 <p>Pour des détails approfondis, voir <a href="https://www.jstatsoft.org/index.php/jss/article/view/v063i19/v63i19.pdf">Harvard &amp; Rue 2015</a></p>
 <div id="data" class="section level3">
 <h3>1. Data</h3>
-<p>We recommend downloading the Rproject file from <a href="https://github.com/PunamA/BDI_INLA" class="uri">https://github.com/PunamA/BDI_INLA</a>. First, download the zip file. Unzip and click the <code>BDI_INLA.Rproj</code> file. We recommend you to use the <code>Intro_to_INLA_students.R</code> Script. In case you want to get further details (or answers to any coding questions), we have provided you with our instructor script as well.</p>
-<p><strong>Malaria prevalence data</strong>: Open-access malaria data hosted by the <a href="https://map.ox.ac.uk/">Malaria Atlas Project</a> accessed using the malariaAtlas R package. We are using Madagascar for this example</p>
-<p><strong>Covariate data</strong>: a suite of satellite imagery provided by MAP has been cleaned and processed for this tutorial. The data is available upon <a href="https://map.ox.ac.uk/contact-us/">request from MAP</a> For data cleaning and the preparation work please run the R-Script <code>data_prep.R</code></p>
-<p>For this tutorial, you do not need to run the preparation work script. The cleaned version of the data is available in <code>input/MDG_clean.Rdata</code></p>
+<p>Nous vous recommandons de télécharger le fichier Rproject à partir de <a href="https://github.com/PunamA/BDI_INLA" class="uri">https://github.com/PunamA/BDI_INLA</a>. First, download the zip file. Unzip and click the <code>BDI_INLA.Rproj</code> file. We recommend you to use the <code>Intro_to_INLA_students.R</code> Script. Au cas où vous voudriez obtenir plus de détails (ou des réponses aux questions de codage), nous vous avons également fourni notre script d’instructeur.</p>
+<p><strong>Données sur la prévalence du paludisme</strong>: Données sur le paludisme en libre accès sauvegarder par le <a href="https://map.ox.ac.uk/">Malaria Atlas Project</a> consultable à l’aide du paquetage malariaAtlas R. Nous utilisons Madagascar pour cet exemple</p>
+<p><strong>Données de covariables</strong>: une série d’images satellitaires fournies par MAP a été nettoyée et traitée pour ce tutoriel. Les données sont disponibles sur <a href="https://map.ox.ac.uk/contact-us/">demande auprès de MAP</a> Pour le nettoyage des données et les travaux de préparation, veuillez exécuter le script-R <code>data_prep.R</code></p>
+<p>Pour ce tutoriel, vous n’avez pas besoin d’exécuter le script de travail de préparation. La version nettoyée des données est disponible dans <code>input/MDG_clean.Rdata</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">'input/MDG_clean.Rdata'</span>)</code></pre></div>
 </div>
 <div id="model-description" class="section level3">
-<h3>2. Model Description</h3>
+<h3>2. Description du modèle</h3>
 <p>Let <span class="math inline">\(Y_i\)</span> be the number of people tested positive (e.g. for malaria) which can be modelled as a binomial.</p>
 <p><span class="math display">\[
 Y_i \sim Binomial(p(s_i), N_i)
