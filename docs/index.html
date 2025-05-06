@@ -194,28 +194,28 @@ mesh4 &lt;-<span class="st"> </span><span class="kw">inla.mesh.2d</span>(<span c
 <p>La coque non convexe fournit un maillage différent de ce que nous avons vu précédemment. Il existe certaines situations où cela peut être utile, par exemple lorsqu’on souhaite modéliser des îles séparées du continent. Pour plus d’informations, nous vous recommandons de lire <a href="https://www.maths.ed.ac.uk/~flindgre/2018/07/22/spatially-varying-mesh-quality/">le blog de F Lindgren’s </a>.</p>
 </div>
 <div id="the-spde-and-a-matrix" class="section level4">
-<h4>4.2. The SPDE and A matrix</h4>
-<p>Spatial models can be thought of as multivariate gaussian models; the correlation structure is determined by a spatial covariance function (modelled as a Matern covariance function), the full Gaussian field is approximated by a Gaussian Markov Random Field (GMRF). The GMRF approximation is computationally intense, which is efficiently performed in the R-INLA using the SPDE model. There are two components that are required to map the GMRF into the SPDE form.</p>
+<h4>4.2. Le SPDE et la matrice A </h4>
+<p>Les modèles spatiaux peuvent être considérés comme des modèles gaussiens multivariés; la structure de corrélation est déterminée par une fonction de covariance spatiale (modélisée comme une fonction de covariance de Matern), le champ gaussien complet est approximé par un champ aléatoire de Markov gaussien (GMRF). L’approximation GMRF est computationnellement intense, ce qui est effectué efficacement dans le R-INLA en utilisant le modèle SPDE. Il y a deux composantes qui sont requises pour mapper le GMRF dans le formulaire SPDE.</p>
 <ol style="list-style-type: lower-alpha">
-<li>the A matrix maps the Gaussian Markov Random Field (GMRF) from the mesh nodes to the n observation location. This is represented by a matrix with the number of observations as column and the number of nodes as rows.</li>
+<li>La matrice A met en correspondance le champ aléatoire de Markov gaussien (GMRF) des nœuds de maillage à l’emplacement n d’observation. Ceci est représenté par une matrice avec le nombre d’observations comme colonne et le nombre de noeuds comme lignes.</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A&lt;-<span class="kw">inla.spde.make.A</span>(<span class="dt">mesh=</span>mesh3,<span class="dt">loc=</span><span class="kw">as.matrix</span>(coords));<span class="kw">dim</span>(A)</code></pre></div>
 <pre><code>## [1] 357 557</code></pre>
-<p>Next, we create the spatial structure (SPDE object). The SPDE object is approximate at the mesh node. We use alpha=2 (fixed here, other values are not tested).</p>
+<p>Ensuite, nous créons la structure spatiale (objet SPDE). L’objet SPDE est approximatif au niveau du nœud maillé. Nous utilisons alpha=2 (fixé ici, les autres valeurs ne sont pas testées).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spde &lt;-<span class="st"> </span><span class="kw">inla.spde2.matern</span>(mesh3, <span class="dt">alpha=</span><span class="dv">2</span>)</code></pre></div>
-<p>Lastly, we create all the required indexes for the SPDE model including naming the spatial field as “spatial.field”, which facilitates the extraction of the estimated values of the spatial field after the fitting process.</p>
+<p>Enfin, nous créons tous les index requis pour le modèle SPDE incluant la dénomination du champ spatial « spatial.field », ce qui facilite l’extraction des valeurs estimées du champ spatial après le processus d’ajustement.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iset &lt;-<span class="st"> </span><span class="kw">inla.spde.make.index</span>(<span class="dt">name =</span> <span class="st">&quot;spatial.field&quot;</span>, spde<span class="op">$</span>n.spde)</code></pre></div>
 </div>
 <div id="the-inla-stack" class="section level4">
-<h4>4.3. the INLA stack</h4>
-<p>Since the covariates already are evaluated at the observation locations, we only want to apply the A matrix to the spatial effect and not the fixed effects. It is difficult to do this manually, but we can use the inla.stack function. Think of it as creating a list of items you require to build a model. The three main <code>inla.stack()</code> arguments are a vector list with the data (data), a list of projector matrices (each related to one block effect, A) and the list of effects (effects). Optionally, a label can be assigned to the data stack (using argument tag).</p>
+<h4>4.3. La pile INLA</h4>
+<p>Puisque les covariables sont déjà évaluées aux emplacements d’observation, nous voulons seulement appliquer la matrice A à l’effet spatial et non pas aux effets fixes. Il est difficile de faire cela manuellement, mais nous pouvons utiliser la fonction inla.stack. Pensez-y comme à la création d’une liste d’éléments dont vous avez besoin pour construire un modèle. Les trois principaux <code>inla.stack()</code> arguments sont une liste de vecteurs avec des données (données), une liste de matrices de projecteur (chacune liée à un effet de bloc, A) et la liste d’effets (effets). En option, une étiquette peut être assignée à la pile de données (en utilisant argument tag).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stk &lt;-<span class="st"> </span><span class="kw">inla.stack</span>(<span class="dt">data=</span><span class="kw">list</span>(<span class="dt">y=</span>MDG_pr_data<span class="op">$</span>positive, <span class="dt">n=</span>MDG_pr_data<span class="op">$</span>examined), <span class="co">#the response</span>
                   
-                  <span class="dt">A=</span><span class="kw">list</span>(A,<span class="dv">1</span>),  <span class="co">#the A matrix; the 1 is included to make the list(covariates)</span>
+                  <span class="dt">A=</span><span class="kw">list</span>(A,<span class="dv">1</span>),  <span class="co">#la matrice A; le 1 est inclus pour faire la liste (covariables)</span>
                   
                   <span class="dt">effects=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="kw">list</span>(<span class="dt">Intercept=</span><span class="dv">1</span>), <span class="co">#the Intercept</span>
-                                 iset),  <span class="co">#the spatial index</span>
-                               <span class="co">#the covariates</span>
+                                 iset),  <span class="co">#l'indice spatial </span>
+                               <span class="co">#les covariables</span>
                                <span class="kw">list</span>(<span class="dt">Elevation =</span> MDG_pr_data<span class="op">$</span>Elevation,
                                     <span class="dt">Access=</span>MDG_pr_data<span class="op">$</span>Access,
                                     <span class="dt">LST_day =</span> MDG_pr_data<span class="op">$</span>LST_day,
@@ -223,9 +223,9 @@ mesh4 &lt;-<span class="st"> </span><span class="kw">inla.mesh.2d</span>(<span c
                                     <span class="dt">EVI =</span> MDG_pr_data<span class="op">$</span>EVI)
                   ), 
                   
-                  <span class="co">#this is a quick name so you can call upon easily</span>
+                  <span class="co">#c’est un nom rapide pour que vous puissiez appeler facilement</span>
                   <span class="dt">tag=</span><span class="st">'dat'</span>)</code></pre></div>
-<p>Two projector matrices are needed <code>A = list(A,1)</code>: the projector matrix for the latent field and a matrix that is a one-to-one map of the covariate. The latter matrix can simply be a constant rather than a diagonal matrix.</p>
+<p>Deux matrices de projecteur sont nécessaires <code>A = list(A,1)</code>: la matrice du projecteur pour le champ latent et une matrice qui est une carte univoque de la covariable. Cette dernière matrice peut simplement être une constante plutôt qu’une matrice diagonale.</p>
 </div>
 <div id="model-fitting" class="section level4">
 <h4>4.4. Model Fitting</h4>
