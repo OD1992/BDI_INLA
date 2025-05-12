@@ -228,26 +228,26 @@ mesh4 &lt;-<span class="st"> </span><span class="kw">inla.mesh.2d</span>(<span c
 <p>Deux matrices de projecteur sont nécessaires <code>A = list(A,1)</code>: la matrice du projecteur pour le champ latent et une matrice qui est une carte univoque de la covariable. Cette dernière matrice peut simplement être une constante plutôt qu’une matrice diagonale.</p>
 </div>
 <div id="model-fitting" class="section level4">
-<h4>4.4. Model Fitting</h4>
-<p>The first step before fitting the model is to express the linear predictor (see Section 2). For the sake of simplicity, we use one covariate only (Elevation).</p>
+<h4>4.4. ajustement du modèle</h4>
+<p>La première étape avant d’adapter le modèle consiste à exprimer le prédicteur linéaire (voir la section 2). Pour des raisons de simplicité, nous utilisons une seule covariable. (Elevation).</p>
 <p><span class="math display">\[
 logit(p(s_i)) = \beta_0 + \beta_1Elevation + \psi(s_i)
 \]</span></p>
-<p>which translates to:</p>
+<p>ce qui correspond à:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">formula0&lt;-y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Intercept <span class="op">+</span><span class="st"> </span>Elevation <span class="op">+</span><span class="st"> </span><span class="kw">f</span>(spatial.field, <span class="dt">model=</span>spde) </code></pre></div>
-<p>Note that to include the default ‘Intercept’ you can use +1. Some people prefer to not do this so they use -1 to exclude it and modify the data stack to include an intercept value in the effects list (just like us).</p>
-<p>Once the formula is created we can fit the model</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model0&lt;-<span class="kw">inla</span>(formula0, <span class="co">#the formula</span>
-             <span class="dt">data=</span><span class="kw">inla.stack.data</span>(stk,<span class="dt">spde=</span>spde),  <span class="co">#the data stack</span>
-             <span class="dt">family=</span> <span class="st">'binomial'</span>,   <span class="co">#which family the data comes from</span>
-             <span class="dt">Ntrials =</span> n,      <span class="co">#this is specific to binomial as we need to tell it the number of examined</span>
-             <span class="dt">control.predictor=</span><span class="kw">list</span>(<span class="dt">A=</span><span class="kw">inla.stack.A</span>(stk),<span class="dt">compute=</span><span class="ot">TRUE</span>),  <span class="co">#compute gives you the marginals of the linear predictor</span>
-             <span class="dt">control.compute =</span> <span class="kw">list</span>(<span class="dt">dic =</span> <span class="ot">TRUE</span>, <span class="dt">waic =</span> <span class="ot">TRUE</span>, <span class="dt">config =</span> <span class="ot">TRUE</span>), <span class="co">#model diagnostics and config = TRUE gives you the GMRF</span>
-             <span class="dt">verbose =</span> <span class="ot">FALSE</span>) <span class="co">#can include verbose=TRUE to see the log of the model runs</span></code></pre></div>
+<p>Notez que pour inclure l’option par défaut « Intercepter », vous pouvez utiliser +1. Certaines personnes préfèrent ne pas le faire, alors elles utilisent -1 pour l’exclure et modifient la pile de données pour inclure une valeur d’interception dans la liste des effets (tout comme nous).</p>
+<p>Une fois la formule créée, nous pouvons adapter le modèle</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model0&lt;-<span class="kw">inla</span>(formula0, <span class="co">#la formule</span>
+             <span class="dt">data=</span><span class="kw">inla.stack.data</span>(stk,<span class="dt">spde=</span>spde),  <span class="co">#la pile de données</span>
+             <span class="dt">family=</span> <span class="st">'binomial'</span>,   <span class="co">#de quelle famille de distribution de probabilité proviennent les données</span>
+             <span class="dt">Ntrials =</span> n,      <span class="co">#ceci est spécifique au binomial car nous devons lui dire le nombre examiné</span>
+             <span class="dt">control.predictor=</span><span class="kw">list</span>(<span class="dt">A=</span><span class="kw">inla.stack.A</span>(stk),<span class="dt">compute=</span><span class="ot">TRUE</span>),  <span class="co">#compute vous donne les marginaux du prédicteur linéaire</span>
+             <span class="dt">control.compute =</span> <span class="kw">list</span>(<span class="dt">dic =</span> <span class="ot">TRUE</span>, <span class="dt">waic =</span> <span class="ot">TRUE</span>, <span class="dt">config =</span> <span class="ot">TRUE</span>), <span class="co">#diagnostics du modèle et config = TRUE vous donne la GMRF</span>
+             <span class="dt">verbose =</span> <span class="ot">FALSE</span>) <span class="co">#peut inclure verbose=TRUE pour voir le journal des exécutions du modèle</span></code></pre></div>
 </div>
 <div id="inla-results" class="section level4">
-<h4>4.5 INLA results</h4>
-<p>The results of the fitting process will be saved in your INLA object, here defined as <code>model0</code>. The object contains a lot of elements (51 elements). Here, we extract only the posterior distribution summaries of the parameters of interest: the fixed effects (intercept and Elevation) and hyper parameters (spatial field parameters).</p>
+<h4>4.5 Résultats de INLA </h4>
+<p>Les résultats du processus de montage seront enregistrés dans votre objet INLA, ici défini comme <code>model0</code>. L’objet contient beaucoup d’éléments (51 éléments). Ici, on extrait uniquement les récapitulatifs de distribution postérieure des paramètres d’intérêt : les effets fixes (Intercept et Elevation) et les hyper paramètres (paramètres de champ spatial).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model0<span class="op">$</span>summary.fix</code></pre></div>
 <pre><code>##                mean       sd 0.025quant  0.5quant 0.975quant      mode
 ## Intercept -4.639712 1.398230  -7.459463 -4.621897  -1.917936 -4.585123
@@ -257,14 +257,14 @@ logit(p(s_i)) = \beta_0 + \beta_1Elevation + \psi(s_i)
 ## Elevation 4.059991e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model0<span class="op">$</span>summary.hyperpar</code></pre></div>
 <pre><code>##                               mean        sd 0.025quant  0.5quant
-## Theta1 for spatial.field -6.262023 0.5248843  -7.417536 -6.205701
-## Theta2 for spatial.field  2.218756 0.3486590   1.634934  2.182154
+## Theta1 pour spatial.field -6.262023 0.5248843  -7.417536 -6.205701
+## Theta2 pour spatial.field  2.218756 0.3486590   1.634934  2.182154
 ##                          0.975quant      mode
-## Theta1 for spatial.field  -5.377439 -5.997638
-## Theta2 for spatial.field   2.985948  2.045210</code></pre>
-<p>The hyperparameters <span class="math inline">\(\theta_1\)</span> is the <span class="math inline">\(log(\tau)\)</span> and <span class="math inline">\(\theta_2\)</span> is the <span class="math inline">\(log(\kappa)\)</span> from the SPDE framework. Briefly, the SPDE that represents the GMRF is</p>
+## Theta1 pour spatial.field  -5.377439 -5.997638
+## Theta2 pour spatial.field   2.985948  2.045210</code></pre>
+<p>Les hyperparamèters <span class="math inline">\(\theta_1\)</span> is the <span class="math inline">\(log(\tau)\)</span> and <span class="math inline">\(\theta_2\)</span> is the <span class="math inline">\(log(\kappa)\)</span> du cadre SPDE. Brièvement, le SPDE qui représente la GMRF est</p>
 <p><span class="math inline">\((\kappa^2 - \Delta)^{\alpha/2}(\tau \xi(s_i)) = W(s_i)\)</span>.</p>
-<p>Where <span class="math inline">\(\kappa\)</span> is the scale parameter and <span class="math inline">\(\tau\)</span> controls the variance, and <span class="math inline">\(W(s)\)</span> is the Gaussian Process. The posterior distribution of the hyperparameters <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> are difficult to interpret. We can transform them into more interpretable quantities such as the range, and the variance. The range is of particular interest. It provides the distance value (in the unit of the point coordinates) above which spatial dependencies become negligible.:</p>
+<p>Where <span class="math inline">\(\kappa\)</span> is the scale parameter and <span class="math inline">\(\tau\)</span> controls the variance, and <span class="math inline">\(W(s)\)</span> est le processus gaussien. La distribution postérieure des hyperparamètres <span class="math inline">\(\theta_1\)</span> et <span class="math inline">\(\theta_2\)</span> sont difficiles à interpréter. Nous pouvons les transformer en quantités plus interprétables telles que la gamme et la variance. La gamme présente un intérêt particulier. Elle fournit la valeur de distance (dans l’unité des coordonnées ponctuelles) au-dessus de laquelle les dépendances spatiales deviennent négligeables.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model0.res&lt;-<span class="kw">inla.spde2.result</span>(model0, <span class="st">'spatial.field'</span>, spde, <span class="dt">do.transf=</span><span class="ot">TRUE</span>)
 model0.res<span class="op">$</span>summary.log.range.nominal</code></pre></div>
 <pre><code>##                 ID      mean        sd 0.025quant  0.5quant 0.975quant
