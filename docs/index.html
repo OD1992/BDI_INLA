@@ -276,13 +276,13 @@ model0.res<span class="op">$</span>summary.log.range.nominal</code></pre></div>
 ## variance.nominal.1  4 5.559004 0.3989684   4.879105 5.519107   6.431093
 ##                        mode kld
 ## variance.nominal.1 5.398491   0</code></pre>
-<p>the <code>do.tranf = TRUE</code> makes sure that marginals are calculated in the same scale as the data.</p>
+<p>le <code>do.tranf = TRUE</code> s’assure que les marginaux sont calculés dans la même échelle que les données.</p>
 </div>
 </div>
 <div id="model-selection" class="section level3">
-<h3>5. Model Selection</h3>
-<p>There is a rich literature on variable selection in the field of statistics. A discussion of this topic would go beyond the scope of this tutorial. However, we show some ways to select variables using R-INLA built-in functions. Mainly we will be focus on metrics that we can include in R-INLA using <code>control.compute</code> function. In this function, one can extract several metrics helpful to select variables, including DIC, CPO/PIT, and WAIC. In the following example, we will focus on WAIC, but one can similarly extract DIC and CPO/PIT metrics.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">###model selection with WAIC (other criteria can be used)
+<h3>5. Sélection du Modèle </h3>
+<p>Il existe une riche littérature sur la sélection des variables dans le domaine de la statistique. Une discussion sur ce sujet dépasserait le cadre de ce tutoriel. Cependant, nous montrons quelques façons de sélectionner des variables à l’aide des fonctions intégrées R-INLA. Principalement, nous allons nous concentrer sur les mesures que nous pouvons inclure dans R-INLA en utilisant la fonction <code>control.compute</code>. Dans cette fonction, on peut extraire plusieurs métriques utiles pour sélectionner des variables, y compris DIC, CPO/PIT et WAIC. Dans l’exemple suivant, nous allons nous concentrer sur WAIC, mais on peut de la même manière extraire les métriques DIC et CPO/PIT.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">###la sélection du modèle avec WAIC (d'autres critères peuvent être utilisés)
 <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
   
   f1 &lt;-<span class="st"> </span><span class="kw">as.formula</span>(<span class="kw">paste0</span>(<span class="st">&quot;y ~ -1 + Intercept + f(spatial.field, model=spde) + &quot;</span>, <span class="kw">paste0</span>(<span class="kw">colnames</span>(covs_df)[<span class="dv">1</span><span class="op">:</span>i], <span class="dt">collapse =</span> <span class="st">&quot; + &quot;</span>)))
@@ -304,8 +304,8 @@ model_selection</code></pre></div>
 ## [3,] &quot;Access + Elevation + EVI&quot;                  &quot;9488.19106054678&quot;
 ## [4,] &quot;Access + Elevation + EVI + LST_day&quot;        &quot;9469.04240648151&quot;
 ## [5,] &quot;Access + Elevation + EVI + LST_day + Rain&quot; &quot;9486.92920832687&quot;</code></pre>
-<p>Which model would you choose? It seems that Model 4 has the lowest WAIC. Therefore, we select Model 4.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#refit for best model:</span>
+<p>Quel modèle choisiriez-vous? Il semble que le modèle 4 ait le plus bas WAIC. Par conséquent, nous sélectionnons le modèle 4.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#refaire pour le meilleur modèle:</span>
 formula&lt;-y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Intercept <span class="op">+</span><span class="st"> </span><span class="kw">f</span>(spatial.field, <span class="dt">model=</span>spde) <span class="op">+</span><span class="st"> </span>Access <span class="op">+</span><span class="st"> </span>Elevation <span class="op">+</span><span class="st"> </span>EVI <span class="op">+</span><span class="st"> </span>LST_day
 
 model1&lt;-<span class="kw">inla</span>(formula, <span class="dt">data=</span><span class="kw">inla.stack.data</span>(stk,<span class="dt">spde=</span>spde),<span class="dt">family=</span> <span class="st">'binomial'</span>, 
@@ -313,8 +313,8 @@ model1&lt;-<span class="kw">inla</span>(formula, <span class="dt">data=</span><s
              <span class="dt">control.predictor=</span><span class="kw">list</span>(<span class="dt">A=</span><span class="kw">inla.stack.A</span>(stk),<span class="dt">compute=</span><span class="ot">TRUE</span>), 
              <span class="dt">control.compute =</span> <span class="kw">list</span>(<span class="dt">dic =</span> <span class="ot">TRUE</span>, <span class="dt">waic =</span> <span class="ot">TRUE</span>, <span class="dt">config =</span> <span class="ot">TRUE</span>), 
              <span class="dt">verbose =</span> <span class="ot">FALSE</span>) </code></pre></div>
-<p>At this point, try exploring <code>model1</code> using the code for <em>INLA results</em>. Is there anything new or interesting?</p>
-<p>Now let’s look at the results of our analysis. The posterior (marginal) distribution of the fixed and hyper parameters will provide key insight into the effect of the covariates and the structure of the spatial field, respectively.</p>
+<p>À ce stade, essayez d’explorer <code>model1</code> en utulisant le code pour <em>les résultats d'INLA</em>. Y a-t-il quelque chose de nouveau ou d’intéressant?</p>
+<p>Voyons maintenant les résultats de notre analyse. La distribution postérieure (marginale) des paramètres fixes et de l’hyper fournira un aperçu clé de l’effet des covariables et de la structure du champ spatial, respectivement.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##observe the plots for fixed parameters
 <span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))
 <span class="kw">plot</span>(model1<span class="op">$</span>marginals.fixed[[<span class="dv">1</span>]], <span class="dt">ty =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(beta[<span class="dv">0</span>]), <span class="dt">ylab =</span> <span class="st">&quot;Density&quot;</span>) 
