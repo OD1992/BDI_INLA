@@ -117,7 +117,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>Pour des détails approfondis, voir <a href="https://www.jstatsoft.org/index.php/jss/article/view/v063i19/v63i19.pdf">Harvard &amp; Rue 2015</a></p>
 <div id="data" class="section level3">
-<h3>1. Data</h3>
+<h3>1. Données</h3>
 <p>Nous vous recommandons de télécharger le fichier Rproject à partir de <a href="https://github.com/PunamA/BDI_INLA" class="uri">https://github.com/PunamA/BDI_INLA</a>. First, download the zip file. Unzip and click the <code>BDI_INLA.Rproj</code> file. We recommend you to use the <code>Intro_to_INLA_students.R</code> Script. Au cas où vous voudriez obtenir plus de détails (ou des réponses aux questions de codage), nous vous avons également fourni notre script d’instructeur.</p>
 <p><strong>Données sur la prévalence du paludisme</strong>: Données sur le paludisme en libre accès sauvegarder par le <a href="https://map.ox.ac.uk/">Malaria Atlas Project</a> consultable à l’aide du paquetage malariaAtlas R. Nous utilisons Madagascar pour cet exemple</p>
 <p><strong>Données de covariables</strong>: une série d’images satellitaires fournies par MAP a été nettoyée et traitée pour ce tutoriel. Les données sont disponibles sur <a href="https://map.ox.ac.uk/contact-us/">demande auprès de MAP</a> Pour le nettoyage des données et les travaux de préparation, veuillez exécuter le script-R <code>data_prep.R</code></p>
@@ -165,7 +165,7 @@ logit(p(s_i)) = \beta_0 + X(s)\beta + \psi(s_i)
 <div id="creating-the-spde-model" class="section level3">
 <h3>4. Création du modèle SPDE</h3>
 <div id="the-mesh-construction" class="section level4">
-<h4>4.1 The Mesh Construction</h4>
+<h4>4.1 Construction de Mesh</h4>
 <p>Avertissement : il n’y a pas de règle pour déterminer la bonne taille et l’extension spatiale du maillage. C’est à l’analyste de fixer les paramètres du maillage, qui varient d’un cas à l’autre. Les modèles basés sur un maillage avec un grand nombre de sommets sont plus exigeants du point de vue informatique et ne peuvent pas nécessairement conduire à de meilleurs résultats qu’un maillage plus grossier. Par conséquent, nous recommandons d’utiliser un maillage relativement grossier pendant la phase préliminaire de l’analyse et d’utiliser une grille plus fine seulement comme étape finale, lorsque les résultats de l’analyse sont satisfaisants. Pour plus de détails sur la façon de construire un maillage, voir Section 2.1. de <a href="https://www.stat.washington.edu/peter/591/Lindgren.pdf">l'article Lindgren et Rue</a>:</p>
 <p>Afin de créer le maillage, nous avons besoin du coordonné pour les points de données observés. Dans notre analyse, nous avons également créé le contour de la frontière de l’île, mais ce n’est pas nécessaire.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coords =<span class="st"> </span><span class="kw">cbind</span>(MDG_pr_data<span class="op">$</span>longitude, MDG_pr_data<span class="op">$</span>latitude)
