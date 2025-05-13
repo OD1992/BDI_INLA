@@ -332,11 +332,18 @@ test_coords <- coords[-train_ind,]
 Ap <- inla.spde.make.A(mesh = mesh3, loc = test_coords);dim(Ap)
 
 #Visualiser les ensembles d'apprentissage et de test
-par(mfrow=c(1,2))
+par(mfrow=c(1,3))
 plot(MDG_shp)
-points(test_coords, pch=21, bg=1,col="white", cex=1.2)
+points(test_coords, pch=2,  col="red", cex=1.2)
 plot(MDG_shp)
-points(train_coords, pch=21, bg=1,col="blue", cex=1.2)
+points(train_coords, pch=16, col="blue", cex=1.2)
+plot(MDG_shp)
+points(train_coords, pch=16,  col="blue", cex=1.2)
+points(test_coords, pch=2,  col="red", cex=1.2)
+
+legend("bottomright", legend=c("Test", "Train"),
+       fill=c("red", "blue"), cex=2)
+
 
 # Ensuite, nous créons les piles (stacks) pour les estimations et les prédictions
 stk.e <- inla.stack(data=list(y=train$pf_pos, n=train$examined), #la réponse
